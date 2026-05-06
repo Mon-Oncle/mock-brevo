@@ -69,10 +69,16 @@
   </section>
 
   <section id="accounts" class="active">
-    <div class="hint">
-      Envoyez un appel vers <code>http://localhost:8080/v3/account</code> avec un header
-      <code>api-key: &lt;votre-clé&gt;</code> pour provisionner un compte.
-      Chaque nouveau compte reçoit automatiquement <strong>2 campagnes par défaut</strong>.
+    <div class="hint hint-with-action">
+      <div>
+        Envoyez un appel vers <code>http://localhost:8080/v3/account</code> avec un header
+        <code>api-key: &lt;votre-clé&gt;</code> pour provisionner un compte.
+        Chaque nouveau compte reçoit automatiquement <strong>2 campagnes par défaut</strong>.
+      </div>
+      <button id="resetAllBtn" class="btn-action btn-danger" type="button"
+        title="Supprimer tous les comptes, contacts, listes, campagnes, templates, dossiers, expéditeurs et emails — irréversible">
+        Tout réinitialiser
+      </button>
     </div>
     <table>
       <thead>

@@ -879,6 +879,39 @@
   };
 
   // ============================================================
+  // RESET ALL
+  // ============================================================
+  $('#resetAllBtn')?.addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    if (!confirm("Supprimer définitivement TOUS les comptes, contacts, listes, campagnes, templates, dossiers, expéditeurs et emails ?\n\nCette action est irréversible.")) {
+      return;
+    }
+    btn.disabled = true;
+    const originalLabel = btn.textContent;
+    btn.textContent = 'Réinitialisation…';
+    try {
+      const resp = await fetch('/mock/reset', { method: 'POST' });
+      if (!resp.ok) throw new Error(resp.status + ' ' + resp.statusText);
+      const data = await resp.json();
+      detailCache.clear();
+      openDetails.clear();
+      accountDrilldown.clear();
+      lastRequestsKey = null;
+      const d = data.deleted || {};
+      const summary = ['accounts', 'contacts', 'lists', 'campaigns', 'templates', 'sentEmails']
+        .map(k => `${k}:${d[k] ?? 0}`).join(' · ');
+      setHealth(true, 'réinitialisé · ' + summary);
+      await refresh();
+    } catch (err) {
+      setHealth(false, 'erreur reset: ' + err.message);
+      alert('Erreur : ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  });
+
+  // ============================================================
   // FILTER + AUTO-REFRESH
   // ============================================================
   filterEl.addEventListener('input', () => refresh());

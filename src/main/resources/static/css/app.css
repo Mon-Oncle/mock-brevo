@@ -293,6 +293,20 @@ button.counter-drill.zero { opacity: 0.35; cursor: not-allowed; }
   border-radius: 4px; color: var(--muted); font-size: 13px;
 }
 .hint code { color: var(--text); background: var(--panel-2); padding: 1px 6px; border-radius: 3px; }
+.hint-with-action {
+  display: flex; align-items: center; gap: 16px; justify-content: space-between;
+}
+.hint-with-action > div { flex: 1; }
+.btn-danger {
+  background: transparent;
+  color: var(--err);
+  border: 1px solid var(--err);
+}
+.btn-danger:hover {
+  background: var(--err);
+  color: var(--panel);
+  border-color: var(--err);
+}
 
 /* buttons ================================================================ */
 .copy-btn {
