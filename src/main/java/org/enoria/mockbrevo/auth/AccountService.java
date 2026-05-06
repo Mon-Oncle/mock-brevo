@@ -3,9 +3,12 @@ package org.enoria.mockbrevo.auth;
 import java.time.Instant;
 import org.enoria.mockbrevo.domain.Account;
 import org.enoria.mockbrevo.domain.AccountRepository;
+import org.enoria.mockbrevo.domain.Folder;
 import org.enoria.mockbrevo.domain.Sender;
 import org.enoria.mockbrevo.domain.SenderRepository;
 import org.enoria.mockbrevo.faker.CampaignFaker;
+import org.enoria.mockbrevo.faker.ContactListFaker;
+import org.enoria.mockbrevo.faker.FolderFaker;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,14 +19,20 @@ public class AccountService {
     private final AccountRepository accounts;
     private final SenderRepository senders;
     private final CampaignFaker campaignFaker;
+    private final FolderFaker folderFaker;
+    private final ContactListFaker contactListFaker;
 
     public AccountService(
             AccountRepository accounts,
             SenderRepository senders,
-            @Lazy CampaignFaker campaignFaker) {
+            @Lazy CampaignFaker campaignFaker,
+            @Lazy FolderFaker folderFaker,
+            @Lazy ContactListFaker contactListFaker) {
         this.accounts = accounts;
         this.senders = senders;
         this.campaignFaker = campaignFaker;
+        this.folderFaker = folderFaker;
+        this.contactListFaker = contactListFaker;
     }
 
     @Transactional
@@ -48,6 +57,8 @@ public class AccountService {
         s.setActive(true);
         senders.save(s);
         campaignFaker.seedDefaults(a);
+        Folder defaultFolder = folderFaker.seedDefaults(a).getFirst();
+        contactListFaker.seedDefaults(a, defaultFolder);
         return a;
     }
 }

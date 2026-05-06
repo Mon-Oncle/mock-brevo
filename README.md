@@ -69,6 +69,32 @@ java -jar target/mock-brevo-*.jar         # run packaged jar (default profile, S
 | Symfony Mailer | use `brevo+api://KEY@localhost:8080` (custom host requires patching the bridge) or route via SMTP with `MOCK_SMTP_ENABLED=true` |
 | `curl` / Postman | replace `https://api.brevo.com` with `http://localhost:8080` |
 
+### Calling a host-running dev server from a Docker container
+
+When mock-brevo runs directly on the host (`./mvnw spring-boot:run` listening on `localhost:8080`) but the client app runs in Docker, the client container can't resolve the host's `localhost`. Use the Docker-managed alias `host.docker.internal` instead.
+
+The client container needs the alias mapped to the host gateway. Add this to your `docker-compose.yml`:
+
+```yaml
+services:
+  yourapp:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+```
+
+Then point the backend at `http://host.docker.internal:8080`. Note that this hostname only works **from inside Docker** — the browser on the host still uses `http://localhost:8080`. If the client also exposes deep-links to mock-brevo's UI (e.g. campaign edit pages), you need two distinct settings: one for backend traffic, one for the rendered URL.
+
+Example for an Enoria-style setup with split API/app URLs:
+
+```env
+# .env — consumed by the PHP backend running in Docker
+BREVO_API_URL=http://host.docker.internal:8080/v3
+# Rendered as a link in the UI, opened by the browser on the host
+BREVO_APP_URL=http://localhost:8080
+```
+
+If you instead run mock-brevo as a service inside the same Docker Compose project (the more common setup), use the service name and internal port — e.g. `BREVO_API_URL=http://mock-brevo:8080/v3` — and expose it through Traefik or a port mapping for browser access.
+
 ## Configuration
 
 All settings are environment variables, sensible defaults for dev:
