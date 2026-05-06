@@ -7,6 +7,8 @@ reaches 1.0.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-05-06
+
 ## [0.3.0] — 2026-04-24
 
 add page to watch campagne information
