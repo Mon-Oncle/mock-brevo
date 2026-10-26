@@ -7,6 +7,10 @@ reaches 1.0.
 
 ## [Unreleased]
 
+### Added
+
+- `PUT /v3/contacts/folders/{folderId}` (update folder name).
+
 ## [1.0.0] — 2026-05-06
 
 ## [0.3.0] — 2026-04-24

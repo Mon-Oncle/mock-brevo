@@ -91,7 +91,7 @@ The full priority list (and which Enoria call sites drive each) is in `ENDPOINTS
 - **P0** `/v3/account`, `POST /v3/smtp/email`, `/v3/senders` — implemented
 - **P1** `/v3/contacts/lists` (CRUD), `/v3/contacts/import` (CSV), `/v3/contacts/lists/{id}/contacts`, `PUT /v3/contacts/{email}` — implemented
 - **P2** `/v3/emailCampaigns`, `POST /v3/emailCampaigns`, `POST /v3/emailCampaigns/{id}/sendNow` — implemented
-- **P3** `/v3/smtp/templates` (GET/POST), `/v3/contacts/folders` (GET/POST) — implemented
+- **P3** `/v3/smtp/templates` (GET/POST), `/v3/contacts/folders` (GET/POST), `PUT /v3/contacts/folders/{id}` — implemented
 - **P4** `POST /mock-webhooks/fire` — implemented (async, best-effort)
 
 When adding a new Brevo endpoint: (1) add a DTO record in `brevo/dto/` with `@JsonIgnoreProperties(ignoreUnknown = true)` on request records (Brevo payloads often have optional fields we don't model); (2) make the controller method read `CurrentAccount.require()` first; (3) scope every query by account; (4) match Brevo's JSON field names exactly — the PHP SDK deserializes strictly.

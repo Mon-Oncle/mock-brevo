@@ -5,13 +5,17 @@ import org.enoria.mockbrevo.auth.CurrentAccount;
 import org.enoria.mockbrevo.brevo.dto.CreateFolderRequest;
 import org.enoria.mockbrevo.brevo.dto.FoldersResponse;
 import org.enoria.mockbrevo.brevo.dto.IdResponse;
+import org.enoria.mockbrevo.brevo.dto.UpdateFolderRequest;
 import org.enoria.mockbrevo.domain.Account;
 import org.enoria.mockbrevo.domain.Folder;
 import org.enoria.mockbrevo.domain.FolderRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,5 +54,21 @@ public class FoldersController {
         f.setAccount(a);
         f.setName(req.name() != null ? req.name() : "Untitled folder");
         return new IdResponse(folders.save(f).getId());
+    }
+
+    @PutMapping("/{folderId}")
+    public ResponseEntity<Void> update(
+            @PathVariable Long folderId,
+            @RequestBody UpdateFolderRequest req) {
+        Account a = CurrentAccount.require();
+        Folder f = folders.findByIdAndAccount(folderId, a).orElse(null);
+        if (f == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (req.name() != null) {
+            f.setName(req.name());
+        }
+        folders.save(f);
+        return ResponseEntity.noContent().build();
     }
 }
