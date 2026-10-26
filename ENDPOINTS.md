@@ -50,6 +50,7 @@ Tous les chemins ci-dessous sont préfixés par `/v3`. Les réponses doivent res
 | 12 | `GET` | `/smtp/templates` | `TransactionalEmailsApi::getSmtpTemplates` | `ApiBrevoService.php:483` | Query : `templateStatus=true`, `limit=50`. Response : `templates[]` avec au moins `id`, `name`. |
 | 13 | `GET` | `/contacts/folders` | `ContactsApi::getFolders` | `ApiBrevoService.php:512` | Query : `limit=20`. Response : `folders[]` avec `id`, `name`. |
 | 14 | `POST` | `/contacts/folders` | `ContactsApi::createFolder` | `ApiBrevoService.php:527` (crée « Campagnes de communication Enoria » si absent) | Payload : `{ "name": "..." }`. Response : `{ "id": <int> }`. |
+| 15 | `PUT` | `/contacts/folders/{folderId}` | `ContactsApi::updateFolder` | — | Payload : `{ "name": "..." }`. Retourner 204. **404** si le dossier n'existe pas pour le compte. |
 
 ## P4 — Routes d'administration du mock (hors API Brevo)
 
